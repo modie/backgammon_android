@@ -362,7 +362,7 @@ public class TavliGame extends View{
 				
 				canvas.drawText(Integer.toString(d1), linesVertical[6]+x/4, linesHorizontal[5]+x , paintfornumbers);	
 				canvas.drawText(Integer.toString(d2), linesVertical[6]+x/4,linesHorizontal[7]-x/2 , paintfornumbers);
-				canvas.drawText("Red Plays", linesVertical[2], linesHorizontal[5]+2*x, paintfornumbers);
+				canvas.drawText("bstrds plays", linesVertical[2], linesHorizontal[5]+2*x, paintfornumbers);
 				
 				break;
 				
@@ -373,7 +373,7 @@ public class TavliGame extends View{
 				
 				canvas.drawText(Integer.toString(d1), linesVertical[6]+x/4, linesHorizontal[5]+x , paintfornumbers);	
 				canvas.drawText(Integer.toString(d2), linesVertical[6]+x/4,linesHorizontal[7]-x/2 , paintfornumbers);
-				canvas.drawText("Blue Plays", linesVertical[2], linesHorizontal[5]+2*x, paintfornumbers);
+				canvas.drawText("modie plyas", linesVertical[2], linesHorizontal[5]+2*x, paintfornumbers);
 		}
 		
 		for (int i = 1 ; i <25 ; i++){
