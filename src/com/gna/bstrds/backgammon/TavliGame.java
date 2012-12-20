@@ -1,5 +1,8 @@
 package com.gna.bstrds.backgammon;
 
+import org.apache.http.conn.routing.RouteInfo.LayerType;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,8 +13,10 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
 
 
 public class TavliGame extends View{
@@ -20,7 +25,7 @@ public class TavliGame extends View{
 	Player Wplayer ;
 	private int max_height ;
 	private int max_width ;
-	Board b ;
+	public static Board b ;
 	Thread t = null ;
 	private int x ;
 	int linesHorizontal [] ;
@@ -49,14 +54,15 @@ public class TavliGame extends View{
 		this.paintforlines.setAntiAlias(true);
 		this.paintforlines.setStyle(Style.STROKE);
 		this.paintforlines.setStrokeWidth(1);
-		
+		paintcheckers = new Paint();
 		paintfornumbers = new Paint();
 		this.paintfornumbers.setAntiAlias(true);
 		this.paintfornumbers.setTextSize(30);
 		this.paintfornumbers.setColor(Color.RED);
 		max_height = maxh ;
 		int keno = 0;
-		max_width = maxw-200 ;
+		max_width = maxw ;
+		//-200 it was
 		/*
 		 * TODO
 		 * this is where we set the text in the right
@@ -64,7 +70,7 @@ public class TavliGame extends View{
 		 * TODO
 		 * TODO
 		 */
-		x = (int)(max_width / 25) ;
+		x = (int)(max_width / 24) ;
 		y = x ;
 		int xm = max_height ;
 		int akro_panw = (int)(x/2-3);
@@ -100,6 +106,7 @@ public class TavliGame extends View{
 		//zwgrafisma tis prwtis kathetis 
 		int y = 1;
 		for(float i=4.25F;i<=12;i+=1.5F){
+			
 			//canvas.drawLine(i*x, 0, i*x, max_height, paintforlines);
 			linesVertical[y]=(int)(i*x) ;
 			y++ ;
@@ -300,10 +307,10 @@ public class TavliGame extends View{
 		canvas.drawBitmap(im, null,new Rect(100,100,400,400),new Paint());
 		*/
 		
-		
+		canvas.save();
 		drawBoard(canvas,b);
-		
-		
+		//DrawBoardTR(canvas,b);
+		canvas.restore();
 		
 		super.onDraw(canvas);
 		
@@ -336,30 +343,8 @@ public class TavliGame extends View{
 		return super.onTouchEvent(event);
 		
 	}
-	public void drawImage(int x_t,int y_t,int a,int b)
-	{
-		Canvas g = new Canvas();
-		
-		
-		if(whoplays)
-		{
-			CheckerOrange chec = new CheckerOrange(x_t,y_t);
-			singlesquare[a][b]=chec ;
-			whoplays = false ;
-		}
-		else
-		{
-			CheckerPink chec = new CheckerPink(x_t, y_t);
-			singlesquare[a][b]=chec ;
-			whoplays = true ;
-		}
-		
-		handler.sendMessage(Message.obtain(handler,0));
-		
-		
-		
-	}
-	public Canvas drawBoard(Canvas canvas,Board board){
+	
+	public void drawBoard(Canvas canvas,Board board){
 		Position pos[] = new Position[28];
 		Bitmap checker_color ;
 		pos = board.getPositions();
@@ -381,41 +366,55 @@ public class TavliGame extends View{
 				extracheckers = numberofcheckers - 5 ;
 				numberofcheckers = 5 ;
 			}
-			
 			if(i<7)
 			{
-				for(int j = 0 ; j<numberofcheckers;j++)
+				int yaw = 13 -i ;
+				//for(int j = 0 ; j<numberofcheckers;j++)
+				for(int j= numberofcheckers-1 ; j >=0;j--)
 				{
-					canvas.drawBitmap(checker_color, null,new Rect(linesVertical[14-i],linesHorizontal[j],linesVertical[13-i],linesHorizontal[j+1]),new Paint());
+					canvas.save();
+					canvas.drawBitmap(checker_color, null,new Rect(linesVertical[yaw],linesHorizontal[j],linesVertical[yaw+1],linesHorizontal[j+1]),paintcheckers);
+					canvas.restore();
 				}
 				if(outnumbered){
-					
+					canvas.save();
 					canvas.drawText(Integer.toString(extracheckers), linesVertical[12-i]+x/2,linesHorizontal[5]+x , paintfornumbers);
+					canvas.restore();
 				}
 			}
 			else if (i<13)
 			{
-				for(int j = 0 ; j<numberofcheckers;j++)
+				int yaw = 12-i ;
+				//for(int j = 0 ; j<numberofcheckers;j++)
+				for(int j = numberofcheckers - 1 ; j >= 0 ; j--)
 				{
-					canvas.drawBitmap(checker_color, null,new Rect(linesVertical[13-i],linesHorizontal[j],linesVertical[12-i],linesHorizontal[j+1]),new Paint());
+					canvas.save();
+					canvas.drawBitmap(checker_color, null,new Rect(linesVertical[yaw],linesHorizontal[j],linesVertical[yaw+1],linesHorizontal[j+1]),paintcheckers);
+					canvas.restore();
 				}
 				if(outnumbered){
+					canvas.save();
 					canvas.drawText(Integer.toString(extracheckers), linesVertical[11-i]+x/2,linesHorizontal[5]+x , paintfornumbers);
-					
+					canvas.restore();
 				}
 			}
+					
 			else if(i<19)
 			{
 				//TODO na dwsw kapoio sovaro onoma sto kapoios
 				int yaw = i - 13 ;
 				for(int j=0 ; j<numberofcheckers ; j++)
 				{
-					canvas.drawBitmap(checker_color, null,new Rect(linesVertical[yaw],linesHorizontal[11-j],linesVertical[yaw+1],linesHorizontal[12-j]),new Paint());
+					canvas.save();
+					canvas.drawBitmap(checker_color, null,new Rect(linesVertical[yaw],linesHorizontal[11-j],linesVertical[yaw+1],linesHorizontal[12-j]),paintcheckers);
+					canvas.restore();
 					//canvas.drawBitmap(checker_color, null,new Rect(linesVertical[kapoios],linesHorizontal[11-j],linesVertical[kapoios+1],linesHorizontal[12-j]),new Paint());
 				}
 				if(outnumbered){
 					//TODO
+					canvas.save();
 					canvas.drawText(Integer.toString(extracheckers), linesVertical[yaw]+x/2,linesHorizontal[7]-x , paintfornumbers);
+					canvas.restore();
 				}
 				
 			}
@@ -424,11 +423,15 @@ public class TavliGame extends View{
 				int yaw = i -12 ;
 				for(int j = 0 ; j<numberofcheckers;j++)
 				{
-					canvas.drawBitmap(checker_color, null,new Rect(linesVertical[yaw],linesHorizontal[11-j],linesVertical[yaw+1],linesHorizontal[12-j]),new Paint());
+					canvas.save();
+					canvas.drawBitmap(checker_color, null,new Rect(linesVertical[yaw],linesHorizontal[11-j],linesVertical[yaw+1],linesHorizontal[12-j]),paintcheckers);
+					canvas.restore();
 				}
 				if(outnumbered){
 					//TODO
+					canvas.save();
 					canvas.drawText(Integer.toString(extracheckers), linesVertical[yaw]+x/2,linesHorizontal[7]-x , paintfornumbers);
+					canvas.restore();
 				}
 			}
 			
@@ -445,8 +448,56 @@ public class TavliGame extends View{
 		
 		
 		
-		return canvas ;
+		//return canvas ;
 	}
 	
+	public void DrawBoardTR(Canvas canvas,Board board)
+	{
+		
+		Bitmap checker_color ;
+		Position pos[] = board.getPositions();
+		
+		checker_color = BitmapFactory.decodeResource(getResources(), R.drawable.p2);	
+		byte numberofcheckers = pos[13].getNum();
+		boolean outnumbered = false ;
+		int extracheckers = 0 ;
+		
+		for(int i = 0 ; i<numberofcheckers;i++){
+			canvas.drawBitmap(checker_color, null,new Rect(linesVertical[0],linesHorizontal[11-i],linesVertical[1],linesHorizontal[12-i]),paintcheckers);
+			}
+		/*
+		 * int yaw = i - 13 ;
+				for(int j=0 ; j<numberofcheckers ; j++)
+				{
+					canvas.save();
+					canvas.drawBitmap(checker_color, null,new Rect(linesVertical[yaw],linesHorizontal[11-j],linesVertical[yaw+1],linesHorizontal[12-j]),paintcheckers);
+		 */
+		
+		checker_color = BitmapFactory.decodeResource(getResources(), R.drawable.p1);
+				
+			numberofcheckers = pos[12].getNum();
+			outnumbered = false ;
+			extracheckers = 0 ;
+			
+			
+			/*
+			 * int yaw = 12-i ;
+				//for(int j = 0 ; j<numberofcheckers;j++)
+				for(int j = numberofcheckers - 1 ; j >= 0 ; j--)
+				{
+					canvas.save();
+					canvas.drawBitmap(checker_color, null,new Rect(linesVertical[yaw+1],linesHorizontal[j],linesVertical[yaw],linesHorizontal[j+1]),paintcheckers);
+					canvas.restore();
+				}
+				
+			 */
+			
+				for(int i = 0 ; i<numberofcheckers;i++){
+					
+				canvas.drawBitmap(checker_color, null,new Rect(linesVertical[1],linesHorizontal[i],linesVertical[0],linesHorizontal[i+1]),paintcheckers);
+				}
 	
+	
+		
+	}
 }

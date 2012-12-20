@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -18,6 +20,7 @@ public class Tavli extends Activity{
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
+        
 		game = new TavliGame(this, dm.heightPixels ,dm.widthPixels);
 		setContentView(game);
 		
@@ -29,7 +32,7 @@ public class Tavli extends Activity{
 				game.setPlayers(new Player((byte)1,Board.B),new Player((byte)1,Board.W));
 				
 				
-				while(true){
+				while(!TavliGame.b.isTerminal()){
 				try
 				{
 					game.play();
@@ -40,9 +43,7 @@ public class Tavli extends Activity{
 					e.printStackTrace();
 				}
 				}
-		}
-			
-			
+			}
 		};
 		t.start();
 	}

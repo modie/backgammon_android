@@ -14,7 +14,7 @@ public class CheckerPink extends Checker{
 	}
 	public void draw(Canvas g,Resources res,int x,int y,int w,int h)
 	{
-		Bitmap im = BitmapFactory.decodeResource(res, R.drawable.p1);
+		Bitmap im = BitmapFactory.decodeResource(res, R.drawable.p2);
 		g.drawBitmap(im, null,new Rect(x*w,y*h,(x*w)+w,(y*h)+h),new Paint());
 	}
 	public boolean equals(Object obj)
