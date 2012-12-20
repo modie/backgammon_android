@@ -20,4 +20,37 @@
         android:layout_centerHorizontal="true"
         android:text="FU_MODIE" />
 
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:text="Button" />
+
+    <EditText
+        android:id="@+id/etB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/editText1"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="22dp"
+        android:ems="10"
+        android:inputType="number"
+        android:text="Black" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/etW"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/button1"
+        android:layout_below="@+id/etB"
+        android:ems="10"
+        android:inputType="number"
+        android:text="White" />
+
 </RelativeLayout>

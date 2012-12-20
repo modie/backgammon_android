@@ -13,6 +13,8 @@ import android.view.WindowManager;
 public class Tavli extends Activity{
 	TavliGame game ;
 	Thread t = new Thread();
+	static byte depth2 ;
+	static byte depth1 = depth2 = 2;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -30,19 +32,24 @@ public class Tavli extends Activity{
 			@Override
 			public void run()
 			{
-				game.setPlayers(new Player((byte)2,Board.B),new Player((byte)2,Board.W));
+				game.setPlayers(new Player((byte)depth1,Board.B),new Player((byte)depth2,Board.W));
 				boolean frun = true;
 				
 				
 				while(!TavliGame.b.isTerminal()){
 					try
 					{
-						//if(frun)
-							//Thread.sleep(3000);
-						
-						frun = false;
+						if(frun)
+						{
+							Thread.sleep(2000);
+							frun = false  ;
+						}
 						game.play();
-						//Thread.sleep(3000);
+						if(depth1 ==  1 && depth2 ==1)
+						{
+							Thread.sleep(2000);
+						}
+						
 					} catch (Exception e)
 					{
 						// TODO Auto-generated catch block
@@ -52,8 +59,13 @@ public class Tavli extends Activity{
 			}
 		};
 		t.start();
-		Intent startMainActivity = new Intent("android.intent.action.MAIN");
-		startActivity(startMainActivity);
+		//Intent startMainActivity = new Intent("android.intent.action.MAIN");
+		//startActivity(startMainActivity);
+	}
+	public void setDepth(byte depth1 , byte depth2 )
+	{
+		this.depth1 = depth1 ;
+		this.depth2 = depth2 ;
 	}
 
 }
