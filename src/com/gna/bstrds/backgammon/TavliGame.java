@@ -362,6 +362,7 @@ public class TavliGame extends View{
 				
 				canvas.drawText(Integer.toString(d1), linesVertical[6]+x/4, linesHorizontal[5]+x , paintfornumbers);	
 				canvas.drawText(Integer.toString(d2), linesVertical[6]+x/4,linesHorizontal[7]-x/2 , paintfornumbers);
+				canvas.drawText("Red Plays", linesVertical[2], linesHorizontal[5]+2*x, paintfornumbers);
 				
 				break;
 				
@@ -372,6 +373,7 @@ public class TavliGame extends View{
 				
 				canvas.drawText(Integer.toString(d1), linesVertical[6]+x/4, linesHorizontal[5]+x , paintfornumbers);	
 				canvas.drawText(Integer.toString(d2), linesVertical[6]+x/4,linesHorizontal[7]-x/2 , paintfornumbers);
+				canvas.drawText("Blue Plays", linesVertical[2], linesHorizontal[5]+2*x, paintfornumbers);
 		}
 		
 		for (int i = 1 ; i <25 ; i++){
@@ -462,56 +464,31 @@ public class TavliGame extends View{
 			}
 		}	
 		
-		//return canvas ;
-	}
-	
-	public void DrawBoardTR(Canvas canvas,Board board)
-	{
+		/* displays eaten white pills */
+		if(pos[0].getNum()>0) {
+			checker_color = BitmapFactory.decodeResource(getResources(), R.drawable.p2);
+			canvas.drawBitmap(checker_color, null,new Rect(linesVertical[0]-2*x-2,linesHorizontal[0],linesVertical[1]-2*x-2,linesHorizontal[1]),paintcheckers);
+			canvas.drawText(Integer.toString(pos[0].getNum()), linesVertical[0]-1.5F*x-2,linesHorizontal[2], paintfornumbers);
+		}
 		
-		Bitmap checker_color ;
-		Position pos[] = board.getPositions();
+		/* displays eaten black pills */
+		if(pos[25].getNum()>0) {
+			checker_color = BitmapFactory.decodeResource(getResources(), R.drawable.p1);
+			canvas.drawBitmap(checker_color, null,new Rect(linesVertical[0]-2*x-2,linesHorizontal[11],linesVertical[1]-2*x-2,linesHorizontal[12]),paintcheckers);
+			canvas.drawText(Integer.toString(pos[25].getNum()), linesVertical[0]-1.5F*x-2,linesHorizontal[11]-x/3, paintfornumbers);
+		}
+
+		if(pos[27].getNum()>0) {
+			checker_color = BitmapFactory.decodeResource(getResources(), R.drawable.p1);
+			canvas.drawBitmap(checker_color, null,new Rect(linesVertical[12]+2*x+4,linesHorizontal[0],linesVertical[13]+2*x+4,linesHorizontal[1]),paintcheckers);
+			canvas.drawText(Integer.toString(pos[27].getNum()), linesVertical[13]+x,linesHorizontal[2], paintfornumbers);
+		}
 		
-		checker_color = BitmapFactory.decodeResource(getResources(), R.drawable.p2);	
-		byte numberofcheckers = pos[13].getNum();
-		boolean outnumbered = false ;
-		int extracheckers = 0 ;
-		
-		for(int i = 0 ; i<numberofcheckers;i++){
-			canvas.drawBitmap(checker_color, null,new Rect(linesVertical[0],linesHorizontal[11-i],linesVertical[1],linesHorizontal[12-i]),paintcheckers);
-			}
-		/*
-		 * int yaw = i - 13 ;
-				for(int j=0 ; j<numberofcheckers ; j++)
-				{
-					canvas.save();
-					canvas.drawBitmap(checker_color, null,new Rect(linesVertical[yaw],linesHorizontal[11-j],linesVertical[yaw+1],linesHorizontal[12-j]),paintcheckers);
-		 */
-		
-		checker_color = BitmapFactory.decodeResource(getResources(), R.drawable.p1);
-				
-			numberofcheckers = pos[12].getNum();
-			outnumbered = false ;
-			extracheckers = 0 ;
-			
-			
-			/*
-			 * int yaw = 12-i ;
-				//for(int j = 0 ; j<numberofcheckers;j++)
-				for(int j = numberofcheckers - 1 ; j >= 0 ; j--)
-				{
-					canvas.save();
-					canvas.drawBitmap(checker_color, null,new Rect(linesVertical[yaw+1],linesHorizontal[j],linesVertical[yaw],linesHorizontal[j+1]),paintcheckers);
-					canvas.restore();
-				}
-				
-			 */
-			
-				for(int i = 0 ; i<numberofcheckers;i++){
-					
-				canvas.drawBitmap(checker_color, null,new Rect(linesVertical[1],linesHorizontal[i],linesVertical[0],linesHorizontal[i+1]),paintcheckers);
-				}
-	
-	
+		if(pos[26].getNum()>0) {
+			checker_color = BitmapFactory.decodeResource(getResources(), R.drawable.p2);
+			canvas.drawBitmap(checker_color, null,new Rect(linesVertical[12]+2*x+4,linesHorizontal[11],linesVertical[13]+2*x+4,linesHorizontal[12]),paintcheckers);
+			canvas.drawText(Integer.toString(pos[26].getNum()), linesVertical[13]+x,linesHorizontal[11]-x/3, paintfornumbers);
+		}
 		
 	}
 }
