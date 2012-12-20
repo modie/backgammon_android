@@ -38,11 +38,11 @@ public class Tavli extends Activity{
 					try
 					{
 						//if(frun)
-							//Thread.sleep(2000);
+							//Thread.sleep(3000);
 						
 						frun = false;
 						game.play();
-						//Thread.sleep(2000);
+						//Thread.sleep(3000);
 					} catch (Exception e)
 					{
 						// TODO Auto-generated catch block
