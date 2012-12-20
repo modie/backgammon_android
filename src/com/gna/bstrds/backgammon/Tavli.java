@@ -1,6 +1,7 @@
 package com.gna.bstrds.backgammon;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -29,23 +30,30 @@ public class Tavli extends Activity{
 			@Override
 			public void run()
 			{
-				game.setPlayers(new Player((byte)1,Board.B),new Player((byte)1,Board.W));
+				game.setPlayers(new Player((byte)2,Board.B),new Player((byte)2,Board.W));
+				boolean frun = true;
 				
 				
 				while(!TavliGame.b.isTerminal()){
-				try
-				{
-					game.play();
-					Thread.sleep(2000);
-				} catch (InterruptedException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+					try
+					{
+						//if(frun)
+							//Thread.sleep(2000);
+						
+						frun = false;
+						game.play();
+						//Thread.sleep(2000);
+					} catch (Exception e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		};
 		t.start();
+		Intent startMainActivity = new Intent("android.intent.action.MAIN");
+		startActivity(startMainActivity);
 	}
 
 }

@@ -50,7 +50,7 @@ public class TavliGame extends View{
 	public TavliGame(Context context,int maxh , int maxw) {
 		super(context);
 		paintforlines = new Paint();
-		this.paintforlines.setARGB(255,255,0,0);
+		this.paintforlines.setARGB(0,255,0,0);
 		this.paintforlines.setAntiAlias(true);
 		this.paintforlines.setStyle(Style.STROKE);
 		this.paintforlines.setStrokeWidth(1);
@@ -58,7 +58,7 @@ public class TavliGame extends View{
 		paintfornumbers = new Paint();
 		this.paintfornumbers.setAntiAlias(true);
 		this.paintfornumbers.setTextSize(30);
-		this.paintfornumbers.setColor(Color.RED);
+		this.paintfornumbers.setColor(Color.GREEN);
 		max_height = maxh ;
 		int keno = 0;
 		max_width = maxw ;
@@ -105,7 +105,7 @@ public class TavliGame extends View{
 		
 		//zwgrafisma tis prwtis kathetis 
 		int y = 1;
-		for(float i=4.25F;i<=12;i+=1.5F){
+		for(float i=4.05F;i<=12;i+=1.5F){
 			
 			//canvas.drawLine(i*x, 0, i*x, max_height, paintforlines);
 			linesVertical[y]=(int)(i*x) ;
@@ -117,7 +117,7 @@ public class TavliGame extends View{
 		//zwgrafisma tis prwtis apo ta deksia 
 		linesVertical[13]=(int)(max_width-(2.6F*x/2));
 		y= 1 ;
-		for(float i=4.25F;i<=12;i+=1.5F){
+		for(float i=4.05F;i<=12;i+=1.5F){
 			//canvas.drawLine(max_width-(i*x), 0, max_width-(i*x), max_height, paintforlines);
 			linesVertical[13-y]=(int)(max_width-(i*x));
 			y++;
@@ -148,36 +148,32 @@ public class TavliGame extends View{
 	{
 		return Wplayer ;
 	}
+	
+	
 	public void play()
 	{
+
 		
-		
-		
-		/* initializing the Move boards 
-		 * for human players*/
-		
-		
-		
-		
-		//drawBoard( new Canvas(), b);
-		
-		
+		byte d1,d2;
 			
 		switch(b.getLastColPlayed()) {
 			
 			case Board.B:
 				
-				System.out.println("White moves");
+				//System.out.println("White moves");
 				
 				
-					Wplayer.roll();
+				Wplayer.roll();
 				
 				/* this means human player */
 				
 					
-				System.out.println("White rolled "+Wplayer.getD1()+" and "+Wplayer.getD2()+" .");
+				//System.out.println("White rolled "+Wplayer.getD1()+" and "+Wplayer.getD2()+" .");
+				d1 = this.Wplayer.getD1();
+				d2 = this.Wplayer.getD2();
+
 					
-				b = new Board(Wplayer.MiniMax(b, Wplayer.getD1(), Wplayer.getD2()));
+				b = new Board(Wplayer.MiniMax(b, d1, d2));
 				
 				b.setLastColPlayed(Board.W);
 
@@ -193,12 +189,16 @@ public class TavliGame extends View{
 				System.out.println("Black moves");
 				
 				
-					Bplayer.roll();
+				Bplayer.roll();
+				
+				d1 = this.Bplayer.getD1();
+				d2 = this.Bplayer.getD2();
+				
 					
 				
-				System.out.println("Black rolled "+Bplayer.getD1()+" and "+Bplayer.getD2()+" .");
+				//System.out.println("Black rolled "+d1+" and "+Bplayer.getD2()+" .");
 					
-				b = new Board(Bplayer.MiniMax(b, Bplayer.getD1(), Bplayer.getD2()));
+				b = new Board(Bplayer.MiniMax(b, d1, d2));
 					
 				b.setLastColPlayed(Board.B);
 				
@@ -312,6 +312,7 @@ public class TavliGame extends View{
 		//DrawBoardTR(canvas,b);
 		canvas.restore();
 		
+		
 		super.onDraw(canvas);
 		
 	}
@@ -345,108 +346,121 @@ public class TavliGame extends View{
 	}
 	
 	public void drawBoard(Canvas canvas,Board board){
+		
+		
 		Position pos[] = new Position[28];
 		Bitmap checker_color ;
 		pos = board.getPositions();
 		
-		for (int i = 1 ; i <25 ; i++){
-			if(pos[i].getCol()!=Board.EMPTY){
-				if(pos[i].getCol()==Board.B){
-					checker_color = BitmapFactory.decodeResource(getResources(), R.drawable.p1);
-				}
-				else
-				{
-					checker_color = BitmapFactory.decodeResource(getResources(), R.drawable.p2);
-				}
-			byte numberofcheckers = pos[i].getNum();
-			boolean outnumbered = false ;
-			int extracheckers = 0 ;
-			if(numberofcheckers>5){
-				outnumbered = true ;
-				extracheckers = numberofcheckers - 5 ;
-				numberofcheckers = 5 ;
-			}
-			if(i<7)
-			{
-				int yaw = 13 -i ;
-				//for(int j = 0 ; j<numberofcheckers;j++)
-				for(int j= numberofcheckers-1 ; j >=0;j--)
-				{
-					canvas.save();
-					canvas.drawBitmap(checker_color, null,new Rect(linesVertical[yaw],linesHorizontal[j],linesVertical[yaw+1],linesHorizontal[j+1]),paintcheckers);
-					canvas.restore();
-				}
-				if(outnumbered){
-					canvas.save();
-					canvas.drawText(Integer.toString(extracheckers), linesVertical[12-i]+x/2,linesHorizontal[5]+x , paintfornumbers);
-					canvas.restore();
-				}
-			}
-			else if (i<13)
-			{
-				int yaw = 12-i ;
-				//for(int j = 0 ; j<numberofcheckers;j++)
-				for(int j = numberofcheckers - 1 ; j >= 0 ; j--)
-				{
-					canvas.save();
-					canvas.drawBitmap(checker_color, null,new Rect(linesVertical[yaw],linesHorizontal[j],linesVertical[yaw+1],linesHorizontal[j+1]),paintcheckers);
-					canvas.restore();
-				}
-				if(outnumbered){
-					canvas.save();
-					canvas.drawText(Integer.toString(extracheckers), linesVertical[11-i]+x/2,linesHorizontal[5]+x , paintfornumbers);
-					canvas.restore();
-				}
-			}
-					
-			else if(i<19)
-			{
-				//TODO na dwsw kapoio sovaro onoma sto kapoios
-				int yaw = i - 13 ;
-				for(int j=0 ; j<numberofcheckers ; j++)
-				{
-					canvas.save();
-					canvas.drawBitmap(checker_color, null,new Rect(linesVertical[yaw],linesHorizontal[11-j],linesVertical[yaw+1],linesHorizontal[12-j]),paintcheckers);
-					canvas.restore();
-					//canvas.drawBitmap(checker_color, null,new Rect(linesVertical[kapoios],linesHorizontal[11-j],linesVertical[kapoios+1],linesHorizontal[12-j]),new Paint());
-				}
-				if(outnumbered){
-					//TODO
-					canvas.save();
-					canvas.drawText(Integer.toString(extracheckers), linesVertical[yaw]+x/2,linesHorizontal[7]-x , paintfornumbers);
-					canvas.restore();
-				}
+		byte d1,d2;
+		
+		switch(board.getLastColPlayed()) {
+			case Board.W : 
 				
-			}
-			else if(i<25)
-			{
-				int yaw = i -12 ;
-				for(int j = 0 ; j<numberofcheckers;j++)
-				{
-					canvas.save();
-					canvas.drawBitmap(checker_color, null,new Rect(linesVertical[yaw],linesHorizontal[11-j],linesVertical[yaw+1],linesHorizontal[12-j]),paintcheckers);
-					canvas.restore();
-				}
-				if(outnumbered){
-					//TODO
-					canvas.save();
-					canvas.drawText(Integer.toString(extracheckers), linesVertical[yaw]+x/2,linesHorizontal[7]-x , paintfornumbers);
-					canvas.restore();
-				}
-			}
-			
+				d1 = Bplayer.getD1();
+				d2 = Bplayer.getD2();
 				
+				canvas.drawText(Integer.toString(d1), linesVertical[6]+x/4, linesHorizontal[5]+x , paintfornumbers);	
+				canvas.drawText(Integer.toString(d2), linesVertical[6]+x/4,linesHorizontal[7]-x/2 , paintfornumbers);
 				
+				break;
 				
+			case Board.B :
 				
+				d1 = Wplayer.getD1();
+				d2 = Wplayer.getD2();
 				
-				
-				
-				
-			}
+				canvas.drawText(Integer.toString(d1), linesVertical[6]+x/4, linesHorizontal[5]+x , paintfornumbers);	
+				canvas.drawText(Integer.toString(d2), linesVertical[6]+x/4,linesHorizontal[7]-x/2 , paintfornumbers);
 		}
 		
-		
+		for (int i = 1 ; i <25 ; i++){
+			if(pos[i].getCol()!=Board.EMPTY){
+					if(pos[i].getCol()==Board.B){
+						checker_color = BitmapFactory.decodeResource(getResources(), R.drawable.p1);
+					}
+					else
+					{
+						checker_color = BitmapFactory.decodeResource(getResources(), R.drawable.p2);
+					}
+				byte numberofcheckers = pos[i].getNum();
+				boolean outnumbered = false ;
+				int extracheckers = 0 ;
+				if(numberofcheckers>5){
+					outnumbered = true ;
+					extracheckers = numberofcheckers - 5 ;
+					numberofcheckers = 5 ;
+				}
+				if(i<7)
+				{
+					int yaw = 13 -i ;
+					//for(int j = 0 ; j<numberofcheckers;j++)
+					for(int j= numberofcheckers-1 ; j >=0;j--)
+					{
+						canvas.save();
+						canvas.drawBitmap(checker_color, null,new Rect(linesVertical[yaw],linesHorizontal[j],linesVertical[yaw+1],linesHorizontal[j+1]),paintcheckers);
+						canvas.restore();
+					}
+					if(outnumbered){
+						canvas.save();
+						canvas.drawText(Integer.toString(extracheckers), linesVertical[13-i]+x/2,linesHorizontal[5]+x , paintfornumbers);
+						canvas.restore();
+					}
+				}
+				else if (i<13)
+				{
+					int yaw = 12-i ;
+					//for(int j = 0 ; j<numberofcheckers;j++)
+					for(int j = numberofcheckers - 1 ; j >= 0 ; j--)
+					{
+						canvas.save();
+						canvas.drawBitmap(checker_color, null,new Rect(linesVertical[yaw],linesHorizontal[j],linesVertical[yaw+1],linesHorizontal[j+1]),paintcheckers);
+						canvas.restore();
+					}
+					if(outnumbered){
+						canvas.save();
+						canvas.drawText(Integer.toString(extracheckers), linesVertical[12-i]+x/2,linesHorizontal[5]+x , paintfornumbers);
+						canvas.restore();
+					}
+				}
+						
+				else if(i<19)
+				{
+					//TODO na dwsw kapoio sovaro onoma sto kapoios
+					int yaw = i - 13 ;
+					for(int j=0 ; j<numberofcheckers ; j++)
+					{
+						canvas.save();
+						canvas.drawBitmap(checker_color, null,new Rect(linesVertical[yaw],linesHorizontal[11-j],linesVertical[yaw+1],linesHorizontal[12-j]),paintcheckers);
+						canvas.restore();
+						//canvas.drawBitmap(checker_color, null,new Rect(linesVertical[kapoios],linesHorizontal[11-j],linesVertical[kapoios+1],linesHorizontal[12-j]),new Paint());
+					}
+					if(outnumbered){
+						//TODO
+						canvas.save();
+						canvas.drawText(Integer.toString(extracheckers), linesVertical[yaw]+x/2,linesHorizontal[7]-x , paintfornumbers);
+						canvas.restore();
+					}
+					
+				}
+				else if(i<25)
+				{
+					int yaw = i -12 ;
+					for(int j = 0 ; j<numberofcheckers;j++)
+					{
+						canvas.save();
+						canvas.drawBitmap(checker_color, null,new Rect(linesVertical[yaw],linesHorizontal[11-j],linesVertical[yaw+1],linesHorizontal[12-j]),paintcheckers);
+						canvas.restore();
+					}
+					if(outnumbered){
+						//TODO
+						canvas.save();
+						canvas.drawText(Integer.toString(extracheckers), linesVertical[yaw]+x/2,linesHorizontal[7]-x , paintfornumbers);
+						canvas.restore();
+					}
+				}	
+			}
+		}	
 		
 		//return canvas ;
 	}
