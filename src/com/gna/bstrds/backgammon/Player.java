@@ -1,14 +1,18 @@
+//Αθανάσιος Τσιακούλιας Μανέττας - 3100190, Γιώργος Κυπριανίδης - 3100225
 package com.gna.bstrds.backgammon;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Player {
     
-	public static final int MAX = 1;
-	public static final int MIN = -1;
+	//public static final int MAX = 1;
+	//public static final int MIN = -1;
 	public static final int NEWBOARD = new Board().hashCode();
+	private static final Board INITB = new Board();
+	
 	private byte maxDepth;
 	private byte playerColor;
 	private byte d1;
@@ -28,8 +32,10 @@ public class Player {
 	
 	public void roll() {
 		
-		this.d1 = (byte)((Math.random()*6)+1);
-		this.d2 = (byte)((Math.random()*6)+1);
+		Random r = new Random();
+		
+		this.d1 = (byte)(r.nextInt(6)+1);
+		this.d2 = (byte)(r.nextInt(6)+1);
 	}
 	
 	public byte getD1() {
@@ -49,11 +55,20 @@ public class Player {
 	
 	public Move[] inputMove(Board b) {
 		
+		/* basic function to read a move from
+		 * the standard input, and pass it to 
+		 * main to be played on the board. 
+		 * maintains a temporary board, so that
+		 * the move (if legal) can be displayed 
+		 * on the screen before it is actually 
+		 * played on the main game board.
+		 */
+		
 		if(b.getChildren(d1, d2, playerColor).isEmpty()) {
 			if(playerColor==Board.W)
-				System.out.println("White rolled "+d1+" and "+d2+" , but it's not very effective..");
+				System.out.println("/n/nWhite rolled "+d1+" and "+d2+" , but it's not very effective../n/n");
 			else 
-				System.out.println("Black rolled "+d1+" and "+d2+" , but it's not very effective..");
+				System.out.println("/n/nBlack rolled "+d1+" and "+d2+" , but it's not very effective../n/n");
 			return null;
 		}
 			
@@ -93,8 +108,6 @@ public class Player {
 				System.out.println("White rolled "+d1+" and "+d2+" .");
 			else 
 				System.out.println("Black rolled "+d1+" and "+d2+" .");
-			
-			//Position[] tempP = tempB.getPositions();
 			
 			/* checking if we are in lastrun mode */
 			boolean lastrun = tempB.lastrun(playerColor);
@@ -151,9 +164,8 @@ public class Player {
 					}
 					
 				} catch(Exception e) {
-					
+	
 					System.out.println("\nTry again3.\n");
-					//e.printStackTrace();
 				}
 			}
 			gotit = false;
@@ -172,14 +184,18 @@ public class Player {
 	
 	public Board MiniMax(Board b, byte d1, byte d2) {
 		
-		
+		/* an implementation of the expectiminimax
+		 * algorithm. min() and  max() recursively
+		 * call each other until the maximum depth
+		 * is reached.
+		 */
 		
 		if(playerColor==Board.B) {
 			
 			Board max = max(new Board(b), 0, d1 ,d2);
 			
-			if(max.hashCode()==NEWBOARD) {
-				//System.out.println("\n\nFUUUUU\n\n");
+			/* if there are no legal moves to be played */
+			if(max.hashCode()==NEWBOARD && max.equals(INITB)) {
 				return b;
 			} else {
 				return max;
@@ -189,8 +205,8 @@ public class Player {
 			
 			Board min = min(new Board(b), 0, d1, d2);
 			
-			if(min.hashCode()==NEWBOARD) {
-				//System.out.println("\n\nFUUUUU\n\n");
+			/* if there are no legal moves to be played */
+			if(min.hashCode()==NEWBOARD && min.equals(INITB)) {
 				return b;
 			} else {
 				return min;
@@ -200,7 +216,7 @@ public class Player {
 	
 	public Board min(Board b, int depth, byte d1, byte d2) {
 		
-		if(b.isTerminal() || depth==maxDepth) {
+		if(b.isTerminal() || depth>=maxDepth) {
 			
 			return b;
 		}
@@ -221,6 +237,14 @@ public class Player {
 					
 					min = child.getValue();
 					minBoard = new Board(child);
+				} else if(child.getValue()==min) {
+					
+					byte rand = (byte)(Math.random()*2);
+					
+					if(rand==1) {
+						min = child.getValue();
+						minBoard = new Board(child);
+					}
 				}
 			}
 			
@@ -260,8 +284,6 @@ public class Player {
 					 * board for future use */
 					child.setd1Pl(d1);
 					child.setd2Pl(d2);
-					
-					child.setParent(b);
 					
 					children.add(child);
 				}
@@ -308,7 +330,7 @@ public class Player {
 	
 	public Board max(Board b, int depth, byte d1, byte d2) {
 		
-		if(b.isTerminal() || depth==maxDepth) {
+		if(b.isTerminal() || depth>=maxDepth) {
 			
 			return b;
 		}	
@@ -329,6 +351,14 @@ public class Player {
 					
 					max = child.getValue();
 					maxBoard = new Board(child);
+				} else if(child.getValue()==max) {
+					
+					byte rand = (byte)(Math.random()*2);
+					
+					if(rand==1) {
+						max = child.getValue();
+						maxBoard = new Board(child);
+					}
 				}
 			}
 			
@@ -368,13 +398,10 @@ public class Player {
 					child.setd1Pl(d1);
 					child.setd2Pl(d2);
 					
-					child.setParent(b);
-					
 					children.add(child);
 				}
 			}
 
-			//max = Integer.MIN_VALUE;
 			int counter = 0;
 			
 			int value = 0;

@@ -1,44 +1,38 @@
+//Αθανάσιος Τσιακούλιας Μανέττας - 3100190, Γιώργος Κυπριανίδης - 3100225
 package com.gna.bstrds.backgammon;
 
-
 public class Move {
+	
+	/* a simple class that produces 
+	 * Move objects
+	 */
 	
 	private byte from;
 	private byte to;
 	private byte color;
-	private int value;
 	
 	public Move() {
 		this.from = 0;
 		this.to = 0;
 		this.color = 0;
-		this.value = 0;
 	}
 	
 	public Move(Move m) {
 		this.from = m.from;
 		this.to = m.to;
 		this.color = m.color;
-		this.value = m.value;
 	}
 	
 	public Move(byte from, byte to, byte color) {
 		this.from = from;
 		this.to = to;
 		this.color = color;
-		this.value = 0;
-		
 	}
 	
 	public Move(byte from, byte to, byte color, int value) {
 		this.from = from;
 		this.to = to;
 		this.color = color;
-		this.value = value;
-	}
-	
-	public Move(int value) {
-		this.value = value;
 	}
 	
 	public byte getFrom() {
@@ -56,11 +50,6 @@ public class Move {
 		return color;
 	}
 	
-	public int getVal() {
-		
-		return value;
-	}
-	
 	public void setFrom(byte from) {
 		
 		this.from = from;
@@ -74,10 +63,5 @@ public class Move {
 	public void setCol(byte col) {
 		
 		this.color = col;
-	}
-	
-	public void setVal(int value) {
-		
-		this.value = value;
 	}
 }

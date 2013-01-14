@@ -22,6 +22,26 @@ public class MainActivity extends Activity {
         etW = (EditText)findViewById(R.id.etW);
         etB = (EditText)findViewById(R.id.etB);
         
+        etW.setOnClickListener(new View.OnClickListener()
+		{
+			
+			@Override
+			public void onClick(View v)
+			{
+				etW.setText("");
+				
+			}
+		});
+        etB.setOnClickListener(new View.OnClickListener()
+		{
+			
+			@Override
+			public void onClick(View v)
+			{
+				etB.setText("");
+				
+			}
+		});
         bt1.setOnClickListener(new View.OnClickListener()
 		{
 			

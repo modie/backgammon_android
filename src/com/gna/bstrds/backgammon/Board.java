@@ -1,3 +1,4 @@
+//Αθανάσιος Τσιακούλιας Μανέττας - 3100190, Γιώργος Κυπριανίδης - 3100225
 package com.gna.bstrds.backgammon;
 
 import java.util.ArrayList;
@@ -22,14 +23,11 @@ public class Board {
 	private byte lastColorPlayed;
 	
 	/* the value of the board. this is not
-	 * the value of the heuristic, it is the
+	 * the value of the heuristic, it's the
 	 * value that is pushed from leaf boards(nodes)
 	 * to non-leaf boards while minimax is
 	 * being executed */
 	private int value;
-	
-	//TODO:see if i actually need this.
-	private Board parent;
 	
 	/* the values of the two dice that were
 	 * last played on the board */
@@ -44,8 +42,6 @@ public class Board {
 		lastColorPlayed = B;
 		
 		value = 0;
-		
-		parent = null;
 
 		positions = new Position[28];
 		for(int i=0; i<28; i++) {
@@ -86,7 +82,6 @@ public class Board {
 		this.lastMove = board.lastMove;
 		this.lastColorPlayed = board.lastColorPlayed;
 		this.value = board.value;
-		this.parent = board.parent;
 		this.positions = new Position[28];
 		this.d1Pl = board.d1Pl;
 		this.d2Pl = board.d2Pl;
@@ -114,10 +109,6 @@ public class Board {
 	
 	public int getValue() {
 		return value;
-	}
-	
-	public Board getParent() {
-		return parent;
 	}
 	
 	public byte getd1Pl() {
@@ -150,10 +141,6 @@ public class Board {
 	
 	public void setValue(int value) {
 		this.value = value;
-	}
-
-	public void setParent(Board parent) { 
-		this.parent = parent;
 	}
 	
 	public void setd1Pl(byte d1Pl) {
@@ -334,8 +321,6 @@ public class Board {
 			}
 		}
 		
-		//TODO:could possibly be a spot to assign dice plated values
-		
 		return true;
 	}
 	
@@ -420,6 +405,13 @@ public class Board {
 	
 	public Move[] movegen(byte dice, byte col) {
 		
+		/* generates moves for double 
+		 * dice rolls, and for boards
+		 * where one of the dice of a 
+		 * single dice roll has already
+		 * been played. 
+		 */
+		
 		Move[] moves;
 		
 		Set<Integer> froms = new HashSet<Integer>();
@@ -471,7 +463,15 @@ public class Board {
 	}
 	
 	public ArrayList<Board> getChildren(byte d1, byte d2, byte col) {
-				
+		
+		/* generates and returns an ArrayList
+		 * of Board states. movegen() is called
+		 * from here to get all the possible moves
+		 * (regardless of legality) , then a legal 
+		 * check is performed on each move, and 
+		 * finally it gets played on a board, and added
+		 * to the list. 
+		 */			
 		
 		ArrayList<Board> children = new ArrayList<Board>();
 		
@@ -488,6 +488,11 @@ public class Board {
 			 */
 			Move[] moves = movegen(d1, d2, col);
 			
+			/* here the generated moves are played on a board
+			 * (if they were legal), and based on whether they
+			 * are terminal or not, they get added to a Set of
+			 * children, or a temporary ArrayList */
+			
 			for(int i=0; i<moves.length; i++) {
 			
 				if(moveIsLegal(moves[i].getFrom(), moves[i].getTo(), col, d1, d2)) {
@@ -500,6 +505,14 @@ public class Board {
 					}
 				}
 			}
+			
+			/* at this point we have a list of states 
+			 * on whitch only one dice has been played, 
+			 * so we want the other dice to be played 
+			 * on each state as well. to achieve that we call
+			 * the second getChildren(dice, color) on 
+			 * each previously generated board.
+			 */
 		
 			ArrayList<Board> temp2;
 			
@@ -526,6 +539,8 @@ public class Board {
 						childSet.add(child);
 					}
 				} else {
+					
+					/* this part could probably be less complicated */
 					
 					if(col==W) {
 						if((child.getLastMove().getFrom()+d1) > 24 && child.getLastMove().getFrom()+d2 > 24) {
@@ -620,6 +635,11 @@ public class Board {
 			}
 		} else {
 			
+			/* if the player has rolled doubles, 
+			 * this fills a Set with all possible 
+			 * child states. 
+			 */
+			
 			ArrayList<Board> t1, t2, t3, t4;
 						
 			t1 = getChildren(d1, col);
@@ -632,6 +652,10 @@ public class Board {
 				}
 				
 				t2 = temp1.getChildren(d1, col);
+				if(t2.isEmpty()) {
+					childSet.add(temp1);
+					continue;
+				}
 			
 				for(Board temp2 : t2) {
 					
@@ -641,6 +665,10 @@ public class Board {
 					}
 					
 					t3 = temp2.getChildren(d1, col);
+					if(t3.isEmpty()) {
+						childSet.add(temp2);
+						continue;
+					}
 					
 					for(Board temp3 : t3) {
 						
@@ -650,6 +678,10 @@ public class Board {
 						}
 					
 						t4 = temp3.getChildren(d1, col);
+						if(t4.isEmpty()) {
+							childSet.add(temp3);
+							continue;
+						}
 						
 						for(Board child : t4) {
 							
@@ -658,9 +690,12 @@ public class Board {
 					}
 				}
 			}
-			
-			
 		}
+		
+		/* we iterate the childSet to add each child
+		 * to the ArrayList we want to return. 
+		 */
+		
 		Iterator<Board> it = childSet.iterator();
 		
 		while(it.hasNext()) {
@@ -672,14 +707,14 @@ public class Board {
 	
 	public ArrayList<Board> getChildren(byte dice, byte col) {
 		
+		/* gets called from the other getChildren to 
+		 * return an Arraylist with all possible states
+		 * on whitch "dice" has been played.
+		 */
+		
 		ArrayList<Board> children = new ArrayList<Board>();
 		
 		Move[] moves = movegen(dice, col);
-		
-		if(moves==null) {
-			System.out.println("\n\n\nNULL\n\n\n");
-			return null;
-		}
 		
 		for(int i=0; i<moves.length; i++) {
 			
@@ -694,6 +729,10 @@ public class Board {
 	}
 	
 	public int evaluate() {
+		
+		/* the heuristic functions that
+		 * help evaluate a state.
+		 */
 		
 		int bsum = 0;
 		int wsum = 0;
@@ -736,8 +775,14 @@ public class Board {
 	
 	public boolean isTerminal() {
 		
-		if(positions[26].getNum()==15 || positions[27].getNum()==15) {
-		//if(positions[26].getNum()==5 || positions[27].getNum()==5) {	
+		/* simple check to see if a state
+		 * is terminal. [26] contains the 
+		 * checkers the white player has 
+		 * taken out of the board, and [27]
+		 * the same for the black player.
+		 */
+		
+		if(positions[26].getNum()==15 || positions[27].getNum()==15) {	
 			return true;
 		}
 		return false;
@@ -765,7 +810,7 @@ public class Board {
 						   "> <b"+positions[25].getNum()+">");
 		System.out.println("pills out : <w"+positions[26].getNum()+
 						   "> <b"+positions[27].getNum()+">");
-		System.out.println("             26  27");
+		System.out.println("             26   27");
 		
 		
 	}
@@ -783,9 +828,12 @@ public class Board {
 		}	
 	}
 	
-	public boolean equals(Object o){
+	public boolean equals(Object o) {
 	    
-	
+		/* equals() override for the HashSet 
+		 * to work.
+		 */
+		
 	    if(o == null) {
 	    	return false;
 	    }
@@ -803,15 +851,24 @@ public class Board {
 	    return true;
 	  }
 	
-	public int hashCode() {  
+	public int hashCode() {
 		
-		int hc = 0;
+		/* also for the HashSet */
 		
-		for(int i=0; i<28; i++) {
+		int hc = 5381;
+		int num ,col;	
+		for(int i=0; i<28; i++) { 
+			col = this.positions[i].getCol();
+			num = this.positions[i].getNum();
+			if(col == B) 
+				col = 3;
+			else if(col == EMPTY)
+				col = 1;
+			else if(col == W)
+				col = 5;
+			hc +=   ((hc <<5)+ hc  ) +  num + i*col*3;  
 			
-			hc += (this.positions[i].getNum()+this.positions[i].getCol())*i;
 		}
-		
-	    return hc;
+		return hc;
 	} 
 }

@@ -273,39 +273,7 @@ public class TavliGame extends View{
 		
 		
 		
-		//singlesquare = new Checker[14][13];
-		/*
-		for(int i = 1 ; i<13 ; i ++)
-		{
-			for(int j =1;j<12;j++)
-			{
-				singlesquare[i][j].draw(canvas, getResources(),i,j,linesVertical[j+1]-linesVertical[j],linesHorizontal[j+1]-linesHorizontal[j]);
-			}
-		}
-		*/
 		
-		/*
-		Bitmap im = BitmapFactory.decodeResource(getResources(), R.drawable.pouliportok);
-		canvas.drawBitmap(im, null,new Rect(linesVertical[0],linesHorizontal[0],linesVertical[1],linesHorizontal[1]),new Paint());
-		Bitmap yaw = BitmapFactory.decodeResource(getResources(), R.drawable.pouliroz);
-		canvas.drawBitmap(yaw,null,new Rect(linesVertical[1],linesHorizontal[1],linesVertical[2],linesHorizontal[2]),new Paint());
-		canvas.drawBitmap(yaw,null,new Rect(linesVertical[0],linesHorizontal[1],linesVertical[1],linesHorizontal[2]),new Paint());
-		canvas.drawBitmap(yaw,null,new Rect(linesVertical[12],linesHorizontal[0],linesVertical[13],linesHorizontal[1]),new Paint());
-		canvas.drawBitmap(yaw,null,new Rect(linesVertical[0],linesHorizontal[11],linesVertical[1],linesHorizontal[12]),new Paint());
-		canvas.drawBitmap(yaw,null,new Rect(linesVertical[12],linesHorizontal[11],linesVertical[13],linesHorizontal[12]),new Paint());
-		//gemisma mias grammis,allagma mono twn horizontal
-		canvas.drawBitmap(im, null,new Rect(linesVertical[11],linesHorizontal[11],linesVertical[12],linesHorizontal[12]),new Paint());
-		canvas.drawBitmap(im, null,new Rect(linesVertical[11],linesHorizontal[10],linesVertical[12],linesHorizontal[11]),new Paint());
-		canvas.drawBitmap(im, null,new Rect(linesVertical[11],linesHorizontal[9],linesVertical[12],linesHorizontal[10]),new Paint());
-		canvas.drawBitmap(im, null,new Rect(linesVertical[11],linesHorizontal[8],linesVertical[12],linesHorizontal[9]),new Paint());
-		canvas.drawBitmap(im, null,new Rect(linesVertical[11],linesHorizontal[7],linesVertical[12],linesHorizontal[8]),new Paint());
-		*/
-		//canvas.drawText("3", linesVertical[11]+x/2,linesHorizontal[7]-x/2 , paintfornumbers);
-		
-		/*
-		Bitmap im = BitmapFactory.decodeResource(getResources(), R.drawable.pouliportok);
-		canvas.drawBitmap(im, null,new Rect(100,100,400,400),new Paint());
-		*/
 		
 		canvas.save();
 		drawBoard(canvas,b);
@@ -318,29 +286,7 @@ public class TavliGame extends View{
 	}
 	public boolean onTouchEvent(MotionEvent event)
 	{
-		/*
-		int x_touch = (int)(event.getX()/(this.getWidth()/x));		
-		int y_touch = (int)(event.getY()/(this.getHeight()/y));
-		int x = 0 ;
-		int a ;
-		for ( a = 0 ; a< linesVertical.length-1;a++)
-		{
-			if ( x_touch>=linesVertical[a] && x_touch <= linesVertical[a+1])
-			{
-				x = linesVertical[a];
-			}
-		}
-		int y = 0 ;
-		int b ;
-		for(b = 0 ; b < linesHorizontal.length-1 ;b++)
-		{
-			if( y_touch>=linesHorizontal[b] && y_touch <=linesHorizontal[b+1])
-			{
-				y = linesHorizontal[b];
-			}
-		}
-		drawImage(x,y,a,b);
-		*/
+		
 		return super.onTouchEvent(event);
 		
 	}
@@ -362,7 +308,7 @@ public class TavliGame extends View{
 				
 				canvas.drawText(Integer.toString(d1), linesVertical[6]+x/4, linesHorizontal[5]+x , paintfornumbers);	
 				canvas.drawText(Integer.toString(d2), linesVertical[6]+x/4,linesHorizontal[7]-x/2 , paintfornumbers);
-				canvas.drawText("bstrds plays", linesVertical[2], linesHorizontal[5]+2*x, paintfornumbers);
+				canvas.drawText("kenny plays", linesVertical[2], linesHorizontal[5]+2*x, paintfornumbers);
 				
 				break;
 				
@@ -373,7 +319,7 @@ public class TavliGame extends View{
 				
 				canvas.drawText(Integer.toString(d1), linesVertical[6]+x/4, linesHorizontal[5]+x , paintfornumbers);	
 				canvas.drawText(Integer.toString(d2), linesVertical[6]+x/4,linesHorizontal[7]-x/2 , paintfornumbers);
-				canvas.drawText("modie plyas", linesVertical[2], linesHorizontal[5]+2*x, paintfornumbers);
+				canvas.drawText("stan plays", linesVertical[2], linesHorizontal[5]+2*x, paintfornumbers);
 		}
 		
 		for (int i = 1 ; i <25 ; i++){

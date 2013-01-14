@@ -33,22 +33,19 @@ public class Tavli extends Activity{
 			public void run()
 			{
 				game.setPlayers(new Player((byte)depth1,Board.B),new Player((byte)depth2,Board.W));
-				boolean frun = true;
+				
 				
 				
 				while(!TavliGame.b.isTerminal()){
 					try
 					{
-						if(frun)
-						{
-							Thread.sleep(2000);
-							frun = false  ;
-						}
-						game.play();
 						if(depth1 ==  1 && depth2 ==1)
 						{
 							Thread.sleep(2000);
 						}
+						
+						game.play();
+						
 						
 					} catch (Exception e)
 					{

@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="a simple modie gay app"
+        android:text="press to start with default values(def = 2 for both players)"
         tools:context=".MainActivity" />
 
     <Button
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/textView1"
         android:layout_centerHorizontal="true"
-        android:text="FU_MODIE" />
+        android:text="Play" />
 
     <Button
         android:id="@+id/button2"
@@ -27,21 +27,9 @@
         android:layout_below="@+id/textView1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:text="Button" />
+        android:text="Play with values" />
 
-    <EditText
-        android:id="@+id/etB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/editText1"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="22dp"
-        android:ems="10"
-        android:inputType="number"
-        android:text="Black" >
-
-        <requestFocus />
-    </EditText>
+   
 
     <EditText
         android:id="@+id/etW"
@@ -51,6 +39,16 @@
         android:layout_below="@+id/etB"
         android:ems="10"
         android:inputType="number"
-        android:text="White" />
-
+        android:text="Stan" />
+     <EditText
+        android:id="@+id/etB"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/etW"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="22dp"
+        android:ems="10"
+        android:inputType="number"
+        android:text="Kenny" />
 </RelativeLayout>
+     
